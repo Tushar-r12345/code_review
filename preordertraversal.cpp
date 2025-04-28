@@ -1,121 +1,69 @@
-<<<<<<< HEAD
-/* The question is related to preorder traversal and the input and output are as follows:
-
+/* this is the code for finding longest valid parentheses with given input and output:
 Example 1:
-Input: root = [1,null,2,3]
-Output: [1,2,3]
 
+Input: s = "(()"
+Output: 2
+Explanation: The longest valid parentheses substring is "()".
 Example 2:
-Input: root = [1,2,3,4,5,null,8,null,null,6,7,9]
-Output: [1,2,4,5,6,7,3,8,9]
 
+Input: s = ")()())"
+Output: 4
+Explanation: The longest valid parentheses substring is "()()".
 Example 3:
-Input: root = []
-Output: []
 
-Example 4:
-Input: root = [1]
-Output: [1]
+Input: s = ""
+Output: 0
 
 */
-
-
+    
 #include <iostream>
-#include <vector>
+#include <string>
+#include <stack>
+#include <algorithm>
 
-// Definition for a binary tree node.
-struct TreeNode {
-    int val;
-    TreeNode *left;
-    TreeNode *right;
-    TreeNode() : val(0), left(nullptr), right(nullptr) {}
-    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
-    TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
-};
+using namespace std;
 
 class Solution {
 public:
-    void PreOrder(TreeNode* root, std::vector<int>& res) {
-        if (root == nullptr) return;
-        res.push_back(root->val);
-        PreOrder(root->left, res);
-        PreOrder(root->right, res);
-    }
+    int longestValidParentheses(string s) {
 
-    std::vector<int> preorderTraversal(TreeNode* root) {
-        std::vector<int> res;
-        PreOrder(root, res);
-        return res;
+        stack<int> st;
+        st.push(-1); // initially push -1 to the stack because if there is ) then we can not pop our stack if it is empty
+
+        int cnt = 0;
+
+        for (int i = 0; i < s.size(); i++) {
+
+            // if it is open parenthesis then push that index to the stack
+            if (s[i] == '(') st.push(i);
+
+            // if it is close then pop the stack
+            // and check it is empty or not if it is empty then push current value to it because if there is another ) then we can not pop our stack if it is empty
+            // if it is not empty then find the length between the (current index i and stack top index) and store the max value in ans
+            else {
+                st.pop();
+
+                if (st.empty()) st.push(i);
+
+                else
+                    cnt = max(cnt, i - st.top());
+            }
+        }
+
+        return cnt;
     }
 };
 
 int main() {
-    // Example usage: Construct a sample binary tree
-    TreeNode* root = new TreeNode(1);
-    root->right = new TreeNode(2);
-    root->right->left = new TreeNode(3);
-
     Solution sol;
-    std::vector<int> preorder = sol.preorderTraversal(root);
 
-    std::cout << "Preorder Traversal: ";
-    for (int val : preorder) {
-        std::cout << val << " ";
-    }
-    std::cout << std::endl;
-
-    // Clean up memory (important to prevent memory leaks)
-    delete root->right->left;
-    delete root->right;
-    delete root;
-
-    // Example with empty tree
-    std::vector<int> preorder_empty = sol.preorderTraversal(nullptr);
-    std::cout << "Preorder Traversal of Empty Tree: ";
-    for (int val : preorder_empty) {
-        std::cout << val << " ";
-    }
-    std::cout << std::endl;
-
-
-    //Example with single node tree
-    TreeNode* root2 = new TreeNode(5);
-     std::vector<int> preorder_single = sol.preorderTraversal(root2);
-    std::cout << "Preorder Traversal of Single Node Tree: ";
-    for (int val : preorder_single) {
-        std::cout << val << " ";
-    }
-    std::cout << std::endl;
-    delete root2;
+    // Test cases
+    cout << sol.longestValidParentheses("(()") << endl;
+    cout << sol.longestValidParentheses(")()()") << endl;
+    cout << sol.longestValidParentheses("") << endl;
+    cout << sol.longestValidParentheses("()(())") << endl;
+    cout << sol.longestValidParentheses("(()(((()") << endl;
+    cout << sol.longestValidParentheses("()(())") << endl;
 
     return 0;
 }
-=======
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
- *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
- * };
- */
-class Solution {
-public:
-      void PreOrder(TreeNode*root,vector<int>&res){
-        if(root==NULL)return;
-        res.push_back(root->val);
-        PreOrder(root->left,res);
-        PreOrder(root->right,res);
-        
-    }
-    vector<int> preorderTraversal(TreeNode* root) {
-        
-        vector<int>res;
-        PreOrder(root,res);
-        return res;
-    }
-};
->>>>>>> main
